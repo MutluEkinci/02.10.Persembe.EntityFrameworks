@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CalısmaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_Kategoriler">
+          <Key>
+            <PropertyRef Name="KategoriID" />
+          </Key>
+          <Property Name="KategoriID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KategoriAdi" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tbl_Urunler">
+          <Key>
+            <PropertyRef Name="UrunID" />
+          </Key>
+          <Property Name="UrunID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UrunAdi" Type="varchar" MaxLength="50" />
+          <Property Name="KategoriID" Type="int" Nullable="false" />
+          <Property Name="Fiyat" Type="money" />
+          <Property Name="Resim" Type="varchar" MaxLength="50" />
+          <Property Name="Aciklama" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <Association Name="FK_tbl_Urunler_tbl_Kategoriler">
+          <End Role="tbl_Kategoriler" Type="Self.tbl_Kategoriler" Multiplicity="1" />
+          <End Role="tbl_Urunler" Type="Self.tbl_Urunler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Kategoriler">
+              <PropertyRef Name="KategoriID" />
+            </Principal>
+            <Dependent Role="tbl_Urunler">
+              <PropertyRef Name="KategoriID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_KdvHesapla" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="money">
+          <Parameter Name="fiyat" Type="money" Mode="In" />
+          <Parameter Name="oran" Type="int" Mode="In" />
+        </Function>
+        <Function Name="gp_AdvUrunEkle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="kod" Type="nvarchar" Mode="In" />
+          <Parameter Name="ad" Type="nvarchar" Mode="In" />
+          <Parameter Name="renk" Type="nvarchar" Mode="In" />
+          <Parameter Name="fiyat" Type="money" Mode="In" />
+        </Function>
+        <EntityContainer Name="CalısmaModelStoreContainer">
+          <EntitySet Name="tbl_Kategoriler" EntityType="Self.tbl_Kategoriler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Urunler" EntityType="Self.tbl_Urunler" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbl_Urunler_tbl_Kategoriler" Association="Self.FK_tbl_Urunler_tbl_Kategoriler">
+            <End Role="tbl_Kategoriler" EntitySet="tbl_Kategoriler" />
+            <End Role="tbl_Urunler" EntitySet="tbl_Urunler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CalısmaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_Kategoriler">
+          <Key>
+            <PropertyRef Name="KategoriID" />
+          </Key>
+          <Property Name="KategoriID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KategoriAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_Urunler" Relationship="Self.FK_tbl_Urunler_tbl_Kategoriler" FromRole="tbl_Kategoriler" ToRole="tbl_Urunler" />
+        </EntityType>
+        <EntityType Name="tbl_Urunler">
+          <Key>
+            <PropertyRef Name="UrunID" />
+          </Key>
+          <Property Name="UrunID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UrunAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KategoriID" Type="Int32" Nullable="false" />
+          <Property Name="Fiyat" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Resim" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Aciklama" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_Kategoriler" Relationship="Self.FK_tbl_Urunler_tbl_Kategoriler" FromRole="tbl_Urunler" ToRole="tbl_Kategoriler" />
+        </EntityType>
+        <Association Name="FK_tbl_Urunler_tbl_Kategoriler">
+          <End Role="tbl_Kategoriler" Type="Self.tbl_Kategoriler" Multiplicity="1" />
+          <End Role="tbl_Urunler" Type="Self.tbl_Urunler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Kategoriler">
+              <PropertyRef Name="KategoriID" />
+            </Principal>
+            <Dependent Role="tbl_Urunler">
+              <PropertyRef Name="KategoriID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CalısmaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_Kategoriler" EntityType="Self.tbl_Kategoriler" />
+          <EntitySet Name="tbl_Urunler" EntityType="Self.tbl_Urunler" />
+          <AssociationSet Name="FK_tbl_Urunler_tbl_Kategoriler" Association="Self.FK_tbl_Urunler_tbl_Kategoriler">
+            <End Role="tbl_Kategoriler" EntitySet="tbl_Kategoriler" />
+            <End Role="tbl_Urunler" EntitySet="tbl_Urunler" />
+          </AssociationSet>
+          <FunctionImport Name="gp_AdvUrunEkle">
+            <Parameter Name="kod" Mode="In" Type="String" />
+            <Parameter Name="ad" Mode="In" Type="String" />
+            <Parameter Name="renk" Mode="In" Type="String" />
+            <Parameter Name="fiyat" Mode="In" Type="Decimal" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CalısmaModelStoreContainer" CdmEntityContainer="CalısmaEntities">
+          <EntitySetMapping Name="tbl_Kategoriler">
+            <EntityTypeMapping TypeName="CalısmaModel.tbl_Kategoriler">
+              <MappingFragment StoreEntitySet="tbl_Kategoriler">
+                <ScalarProperty Name="KategoriID" ColumnName="KategoriID" />
+                <ScalarProperty Name="KategoriAdi" ColumnName="KategoriAdi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Urunler">
+            <EntityTypeMapping TypeName="CalısmaModel.tbl_Urunler">
+              <MappingFragment StoreEntitySet="tbl_Urunler">
+                <ScalarProperty Name="UrunID" ColumnName="UrunID" />
+                <ScalarProperty Name="UrunAdi" ColumnName="UrunAdi" />
+                <ScalarProperty Name="KategoriID" ColumnName="KategoriID" />
+                <ScalarProperty Name="Fiyat" ColumnName="Fiyat" />
+                <ScalarProperty Name="Resim" ColumnName="Resim" />
+                <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="gp_AdvUrunEkle" FunctionName="CalısmaModel.Store.gp_AdvUrunEkle" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
